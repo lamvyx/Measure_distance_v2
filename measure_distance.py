@@ -1,6 +1,5 @@
 import cv2
 import csv
-import math
 import threading
 from playsound import playsound
 from ultralytics import YOLO
@@ -18,10 +17,10 @@ def load_translations():
     try:
         with open(TRANSLATION_FILE, "r", encoding="utf-8") as f:
             translations = json.load(f)
-            print(f"✅ Đã tải {len(translations)} nhãn tiếng Việt từ {TRANSLATION_FILE}")
+            print(f"Đã tải {len(translations)} nhãn tiếng Việt từ {TRANSLATION_FILE}")
             return translations
     except FileNotFoundError:
-        print(f"⚠️ Không tìm thấy file {TRANSLATION_FILE}. Sẽ dùng nhãn gốc (tiếng Anh).")
+        print(f"Không tìm thấy file {TRANSLATION_FILE}. Sẽ dùng nhãn gốc (tiếng Anh).")
         return {}
 
 LABEL_TRANSLATION = load_translations()
@@ -39,6 +38,7 @@ try:
 except FileNotFoundError:
     print("Chưa có file object_widths.csv. Hãy chạy collect_data.py trước.")
     exit()
+
 
 last_spoken = {}
 
@@ -58,7 +58,7 @@ def speak_distance(label, distance_cm, cooldown=5):
     with tempfile.NamedTemporaryFile(delete=False, suffix='.mp3') as tmp:
         tts.save(tmp.name)
         tmp_path = tmp.name
-    threading.Thread( target=lambda: (playsound(tmp_path), os.remove(tmp_path)),daemon=True).start()
+    threading.Thread(target=lambda: (playsound(tmp_path), os.remove(tmp_path)),daemon=True).start()
 
 def calculate_distance(known_width, focal_length, per_width):
     return (known_width * focal_length) / per_width if per_width > 0 else None

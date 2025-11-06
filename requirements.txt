@@ -6,3 +6,4 @@ pandas
 matplotlib
 pyttsx3
 playsound
+gTTS
